@@ -54,6 +54,7 @@ export const useAuthStore = defineStore("auth", {
       await axios
         .get("api/user")
         .then((res) => {
+          this.authUserData = res.data;
           if (res.data.role == null) {
             responseMessage().error("Account has no role!");
           } else {
@@ -90,8 +91,8 @@ export const useAuthStore = defineStore("auth", {
           .post("/register", this.authUserRegistration)
           .then((res) => {
             responseMessage().success("Successfully Registered.");
-            // router.replace({ path: "/login" });
-            console.log(res);
+            router.replace({ path: "/login" });
+            this.resetInput();
           })
           .catch((err) => {
             responseMessage().error(err.response.data.message);
@@ -109,6 +110,7 @@ export const useAuthStore = defineStore("auth", {
         .then((res) => {
           this.authLoading = false;
           this.getUserData();
+          this.resetInput();
         })
         .catch((err) => {
           responseMessage().error(err.response.data.message);
